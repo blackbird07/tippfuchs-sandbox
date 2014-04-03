@@ -34,6 +34,8 @@ set :tests, ["spec"] # run "rspec spec" before being allowed to continue
 # which config files should be copied by deploy:setup_config
 # see documentation in lib/capistrano/tasks/setup_config.cap
 # for details of operations
+# !Important!: will first look in config/deploy/<application>_<rails_env> and then in config/deploy/shared
+#              Use cap production deploy:setup_config to copy the config files to the server
 set(:config_files, %w(
   nginx.conf
   application.yml
