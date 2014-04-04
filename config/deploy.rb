@@ -39,12 +39,11 @@ set :tests, ["spec"] # run "rspec spec" before being allowed to continue
 set(:config_files, %w(
   nginx.conf
   application.yml
-  database.example.yml
   log_rotation
   monit
   unicorn.rb
   unicorn_init.sh
-))
+)) # + database.yml
 
 # which config files should be made executable after copying
 # by deploy:setup_config
@@ -91,6 +90,8 @@ namespace :deploy do
   after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
   after :finishing, 'deploy:cleanup'
 end
+
+load "config/recipes/postgresql"
 
 
 
