@@ -37,13 +37,14 @@ set :tests, ["spec"] # run "rspec spec" before being allowed to continue
 # !Important!: will first look in config/deploy/<application>_<rails_env> and then in config/deploy/shared
 #              Use cap production deploy:setup_config to copy the config files to the server
 set(:config_files, %w(
-  nginx.conf
+  nginx_vhost.conf
   application.yml
   log_rotation
   monit
   unicorn.rb
   unicorn_init.sh
-)) # + database.yml
+  database.yml
+))
 
 # which config files should be made executable after copying
 # by deploy:setup_config
@@ -83,15 +84,13 @@ set(:symlinks, [
 
 namespace :deploy do
   # make sure we're deploying what we think we're deploying
-  before :deploy, "deploy:check_revision"
+  # before :deploy, "deploy:check_revision"
   # only allow a deploy with passing tests to deployed
-  before :deploy, "deploy:run_tests"
+  # before :deploy, "deploy:run_tests"
   # compile assets locally then rsync
-  after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
+  #after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
   after :finishing, 'deploy:cleanup'
 end
-
-load "config/recipes/postgresql"
 
 
 

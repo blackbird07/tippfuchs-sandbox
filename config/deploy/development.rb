@@ -1,6 +1,6 @@
 # Template: https://raw.githubusercontent.com/TalkingQuickly/capistrano-3-rails-template/master/config/deploy/production.rb
 
-set :stage, :production
+set :stage, :development
 set :branch, 'master'
 
 # used in case we're deploying multiple versions of the same
@@ -14,11 +14,11 @@ set :deploy_to, "/home/#{fetch(:deploy_user)}/apps/#{fetch(:full_app_name)}"
 
 # dont try and infer something as important as environment from
 # stage name. Always set explicitly!
-set :rails_env, :production
+set :rails_env, :development
 
 # number of unicorn workers, this will be reflected in
 # the unicorn.rb and the monit configs
-set :unicorn_worker_count, 2
+set :unicorn_worker_count, 1
 
 # whether we're using ssl or not, used for building nginx config file
 set :enable_ssl, true
