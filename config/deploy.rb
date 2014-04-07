@@ -9,6 +9,8 @@ set :application, 'tippfuchs'
 set :scm, :git
 set :repo_url,    'git@github.com:blackbird07/tippfuchs-sandbox.git'
 
+set :deploy_user, 'vagrant'
+
 # setup rbenv
 set :rbenv_type, :system
 set :rbenv_ruby, '2.1.1'
@@ -84,11 +86,11 @@ set(:symlinks, [
 
 namespace :deploy do
   # make sure we're deploying what we think we're deploying
-  # before :deploy, "deploy:check_revision"
+  before :deploy, "deploy:check_revision"
   # only allow a deploy with passing tests to deployed
-  # before :deploy, "deploy:run_tests"
+  before :deploy, "deploy:run_tests"
   # compile assets locally then rsync
-  #after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
+  after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
   after :finishing, 'deploy:cleanup'
 end
 

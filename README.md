@@ -1,7 +1,9 @@
 # README
 
 ```
-
+bundle
+bundle exec cap development deploy:setup_config
+bundle exec cap development deploy
 ```
 
 This README would normally document whatever steps are necessary to get the
