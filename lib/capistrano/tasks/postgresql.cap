@@ -5,8 +5,10 @@ set :postgresql_database, 'tippfuchs' # "#{fetch(:application)}_#{fetch(:stage)}
 
 namespace :postgresql do
   task :setup do
-    invoke 'postgresql:create_db_user'
-    invoke 'postgresql:create_database'
+    on roles(:db) do
+      invoke 'postgresql:create_db_user'
+      invoke 'postgresql:create_database'
+    end
   end
   after 'deploy:started', 'postgresql:setup'
   

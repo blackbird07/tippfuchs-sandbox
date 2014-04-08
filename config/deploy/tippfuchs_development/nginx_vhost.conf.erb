@@ -8,7 +8,7 @@ upstream unicorn {
 # http-redirects to https; even if using hsts;
 server {
   listen              80 default_server;
-  server_name         <%= fetch(:TODO) %>;
+  server_name         <%= fetch(:nginx_server_name) %>;
   
   rewrite ^ https://$server_name$request_uri? permanent;
   
@@ -18,12 +18,12 @@ server {
   }
 }
 server {
-  listen               443 ssl<% if fetch(:enably_spdy) %> spdy<% end %> default_server;
-  server_name          <%= fetch(:TODO) %>;
-  root                 <%= fetch(:deploy_to) %>/current/public;
+  listen               443 ssl<% if fetch(:nginx_enable_spdy) %> spdy<% end %> default_server;
+  server_name          <%= fetch(:nginx_server_name) %>;
+  root                 /vagrant;
   
-  access_log           <%= fetch(:deploy_to) %>/shared/shared/log/access.log;
-  error_log            <%= fetch(:deploy_to) %>/shared/shared/log/error.log;
+  access_log           off;
+  error_log            /vagrant/log/nginx_error.log;
   
   keepalive_timeout    10;
   client_max_body_size 10M;
@@ -32,9 +32,9 @@ server {
   add_header  Strict-Transport-Security "max-age=31536000; includeSubDomains";
   
   # SSL Config
-  ssl on
-  ssl_certificate      <%= fetch(:deploy_to) %>/shared/ssl_cert.crt;
-  ssl_certificate_key  <%= fetch(:deploy_to) %>/shared/ssl_private_key.key;
+  ssl on;
+  ssl_certificate      <%= shared_path %>/ssl_cert.crt;
+  ssl_certificate_key  <%= shared_path %>/ssl_cert.key;
   
   # Perfect Forward Secrecy (PFS) and BEAST / Lucky 13
   ssl_protocols        SSLv3 TLSv1 TLSv1.1 TLSv1.2;
@@ -47,11 +47,11 @@ server {
   gzip on;
   
   # Cipher Suites
-  # nginx-default - kind of ok and working in usually any cases, limited PFS
-  ssl_ciphers HIGH:!aNULL:!MD5;
-  
   # suggestion from sslabs / including PFS, good compatibility
-  #ssl_ciphers EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS;
+  ssl_ciphers EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS;
+  
+  # nginx-default - kind of ok and working in usually any cases, limited PFS
+  #ssl_ciphers HIGH:!aNULL:!MD5;
   # additional cipher_suite suggestions -> see https://www.mare-system.de/guide-to-nginx-ssl-spdy-hsts/
   
   # deny access to .htaccess files, if Apache's document root
@@ -96,11 +96,11 @@ server {
 <% else %>
 server {
   listen 80 default deferred;
-  server_name         <%= fetch(:TODO) %>;
-  root                <%= fetch(:deploy_to) %>/current/public;
+  server_name          <%= fetch(:nginx_server_name) %>;
+  root                 /vagrant;
   
-  access_log           <%= fetch(:deploy_to) %>/shared/shared/log/access.log;
-  error_log            <%= fetch(:deploy_to) %>/shared/shared/log/error.log;
+  access_log           off;
+  error_log            /vagrant/log/nginx_error.log;
   
   keepalive_timeout    10;
   client_max_body_size 10M;

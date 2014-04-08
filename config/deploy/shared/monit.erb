@@ -3,10 +3,10 @@ set mail-format { subject: <%= "#{fetch(:full_app_name)} - #{fetch(:rails_env)}"
 
 check process unicorn
   with pidfile <%= current_path %>/tmp/pids/unicorn.pid
-  start program = "/etc/init.d/unicorn_<%= application %>_<%= fetch(:rails_env)%> start"
-  stop program = "/etc/init.d/unicorn_<%= application %>_<%= fetch(:rails_env)%> stop"
-  if mem is greater than 300.0 MB for 1 cycles then restart       # eating up memory?
-  if cpu is greater than 50% for 2 cycles then alert                  # send an email to admin
+  start program = "/etc/init.d/unicorn_<%= fetch(:full_app_name) %> start"
+  stop program = "/etc/init.d/unicorn_<%= fetch(:full_app_name) %> stop"
+  if mem is greater than 300.0 MB for 1 cycles then restart            # eating up memory?
+  if cpu is greater than 50% for 2 cycles then alert                   # send an email to admin
   if cpu is greater than 80% for 30 cycles then restart                # hung process?
   group unicorn
 
@@ -14,7 +14,7 @@ check process unicorn
   check process unicorn_worker_<%= (5000 + worker).to_s %>
     with pidfile <%= current_path %>/tmp/pids/unicorn.<%= (5000 + worker).to_s %>.pid
     start program = "/bin/true"
-    stop program = "/etc/init.d/unicorn_<%= application %>_<%= fetch(:rails_env)%> kill_worker <%= (5000 + worker).to_s %>"
+    stop program = "/etc/init.d/unicorn_<%= fetch(:full_app_name) %> kill_worker <%= (5000 + worker).to_s %>"
     if mem is greater than 350.0 MB for 1 cycles then restart
     if cpu is greater than 80% for 30 cycles then restart
 
