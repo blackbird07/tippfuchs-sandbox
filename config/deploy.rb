@@ -41,6 +41,8 @@ set(:config_files, %w(
   application.yml
   database.yml
   nginx_vhost.conf
+  ssl_cert.crt
+  ssl_cert.key
   unicorn_init.sh
   unicorn.rb
   log_rotation

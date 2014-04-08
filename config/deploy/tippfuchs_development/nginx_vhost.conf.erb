@@ -33,8 +33,8 @@ server {
   
   # SSL Config
   ssl on;
-  ssl_certificate      <%= shared_path %>/ssl_cert.crt;
-  ssl_certificate_key  <%= shared_path %>/ssl_cert.key;
+  ssl_certificate      <%= shared_path %>/config/ssl_cert.crt;
+  ssl_certificate_key  <%= shared_path %>/config/ssl_cert.key;
   
   # Perfect Forward Secrecy (PFS) and BEAST / Lucky 13
   ssl_protocols        SSLv3 TLSv1 TLSv1.1 TLSv1.2;
